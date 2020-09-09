@@ -3,7 +3,6 @@ package lit.amida.lfsjanken
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -11,33 +10,36 @@ class MainActivity : AppCompatActivity() {
     val CHOKI = 1
     val PA = 2
 
+    var numWin = 0
+    var numDraw = 0
+    var numLose = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         buttonGu.setOnClickListener {
-            textPlayer.text = "あなたの手はグーです"
+            imagePlayer.setImageResource(R.drawable.gu)
             jud(GU)
         }
 
         buttonChoki.setOnClickListener {
-            textPlayer.text = "あなたの手はチョキです"
+            imagePlayer.setImageResource(R.drawable.choki)
             jud(CHOKI)
         }
 
         buttonPa.setOnClickListener {
-            textPlayer.text = "あなたの手はパーです"
+            imagePlayer.setImageResource(R.drawable.pa)
             jud(PA)
         }
     }
 
     private fun jud(player:Int){
         val cpu = (0..2).random()
-        Log.d("cpu", "$cpu")
 
         when(cpu){
             GU -> {
-                textCPU.text = "相手の手はグーです"
+                imageCPU.setImageResource(R.drawable.gu)
                 when(player){
                     GU -> draw()
                     CHOKI -> lose()
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             CHOKI ->{
-                textCPU.text = "相手の手はチョキです"
+                imageCPU.setImageResource(R.drawable.choki)
                 when(player){
                     GU -> win()
                     CHOKI -> draw()
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             PA ->{
-                textCPU.text = "相手の手はパーです"
+                imageCPU.setImageResource(R.drawable.pa)
                 when(player){
                     GU -> lose()
                     CHOKI -> win()
@@ -65,16 +67,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun draw(){
         textResult.setTextColor(Color.parseColor("#00A000"))
-        textResult.text = "引き分けです"
+        numDraw++
+        textResult.text = "${numWin}勝${numLose}敗${numDraw}分"
     }
 
     private fun win(){
         textResult.setTextColor(Color.parseColor("#A00000"))
-        textResult.text = "あなたの勝ちです"
+        numWin++
+        textResult.text = "${numWin}勝${numLose}敗${numDraw}分"
     }
 
     private fun lose(){
         textResult.setTextColor(Color.parseColor("#0000A0"))
-        textResult.text = "あなたの負けです"
+        numLose++
+        textResult.text = "${numWin}勝${numLose}敗${numDraw}分"
     }
 }
